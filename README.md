@@ -1,4 +1,4 @@
-# BMBC: Bilateral Motion Estimation with Bilateral Cost Volume for Video Interpolation
+# BMBC
 
 Junheum Park,
 Keunsoo Ko, 
