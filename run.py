@@ -1,3 +1,4 @@
+import torch
 import PIL.Image as Image
 import torch.nn.functional as F
 import torchvision.transforms.functional as TF
@@ -35,6 +36,7 @@ args.dict['filtering'] = DynFilter()
 args.dict['context_layer'].load_state_dict(torch.load('Weights/context_layer.pth'))
 args.dict['BMNet'].load_state_dict(torch.load(args.ckpt_bm))
 args.dict['DF_Net'].load_state_dict(torch.load(args.ckpt_df))
+ReLU = torch.nn.ReLU()
 
 for param in args.dict['context_layer'].parameters():
     param.requires_grad = False
@@ -49,6 +51,8 @@ if torch.cuda.is_available():
     args.dict['DF_Net'].cuda()
     args.dict['context_layer'].cuda()
     args.dict['filtering'].cuda()
+    ReLU.cuda()
+    
 
 I0 = Image.open(args.first)
 I1 = Image.open(args.second)
@@ -81,12 +85,12 @@ with torch.no_grad():
     BM[:, 0, :, :] *= W / float(W_)
     BM[:, 1, :, :] *= H / float(H_)
 
-    C1 = warp(torch.cat((I0, args.dict['context_layer'](I0)), dim=1), (-args.time_step) * F_0_1)   # F_t_0
-    C2 = warp(torch.cat((I1, args.dict['context_layer'](I1)), dim=1), (1-args.time_step) * F_0_1)  # F_t_1
-    C3 = warp(torch.cat((I0, args.dict['context_layer'](I0)), dim=1), (args.time_step) * F_1_0)  # F_t_0
-    C4 = warp(torch.cat((I1, args.dict['context_layer'](I1)), dim=1), (args.time_step-1) * F_1_0)   # F_t_1
-    C5 = warp(torch.cat((I0, args.dict['context_layer'](I0)), dim=1), BM*(-2*args.time_step))
-    C6 = warp(torch.cat((I1, args.dict['context_layer'](I1)), dim=1), BM * 2 * (1-args.time_step))
+    C1 = warp(torch.cat((I0, ReLU(args.dict['context_layer'](I0)), dim=1)), (-args.time_step) * F_0_1)   # F_t_0
+    C2 = warp(torch.cat((I1, ReLU(args.dict['context_layer'](I1)), dim=1)), (1-args.time_step) * F_0_1)  # F_t_1
+    C3 = warp(torch.cat((I0, ReLU(args.dict['context_layer'](I0)), dim=1)), (args.time_step) * F_1_0)  # F_t_0
+    C4 = warp(torch.cat((I1, ReLU(args.dict['context_layer'](I1)), dim=1)), (args.time_step-1) * F_1_0)   # F_t_1
+    C5 = warp(torch.cat((I0, ReLU(args.dict['context_layer'](I0)), dim=1)), BM*(-2*args.time_step))
+    C6 = warp(torch.cat((I1, ReLU(args.dict['context_layer'](I1)), dim=1)), BM * 2 * (1-args.time_step))
 
     input = torch.cat((I0,C1,C2,C3,C4,C5,C6,I1),dim=1)
     DF = F.softmax(args.dict['DF_Net'](input),dim=1)
