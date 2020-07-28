@@ -85,12 +85,12 @@ with torch.no_grad():
     BM[:, 0, :, :] *= W / float(W_)
     BM[:, 1, :, :] *= H / float(H_)
 
-    C1 = warp(torch.cat((I0, ReLU(args.dict['context_layer'](I0)), dim=1)), (-args.time_step) * F_0_1)   # F_t_0
-    C2 = warp(torch.cat((I1, ReLU(args.dict['context_layer'](I1)), dim=1)), (1-args.time_step) * F_0_1)  # F_t_1
-    C3 = warp(torch.cat((I0, ReLU(args.dict['context_layer'](I0)), dim=1)), (args.time_step) * F_1_0)  # F_t_0
-    C4 = warp(torch.cat((I1, ReLU(args.dict['context_layer'](I1)), dim=1)), (args.time_step-1) * F_1_0)   # F_t_1
-    C5 = warp(torch.cat((I0, ReLU(args.dict['context_layer'](I0)), dim=1)), BM*(-2*args.time_step))
-    C6 = warp(torch.cat((I1, ReLU(args.dict['context_layer'](I1)), dim=1)), BM * 2 * (1-args.time_step))
+    C1 = warp(torch.cat((I0, ReLU(args.dict['context_layer'](I0))), dim=1), (-args.time_step) * F_0_1)   # F_t_0
+    C2 = warp(torch.cat((I1, ReLU(args.dict['context_layer'](I1))), dim=1), (1-args.time_step) * F_0_1)  # F_t_1
+    C3 = warp(torch.cat((I0, ReLU(args.dict['context_layer'](I0))), dim=1), (args.time_step) * F_1_0)  # F_t_0
+    C4 = warp(torch.cat((I1, ReLU(args.dict['context_layer'](I1))), dim=1), (args.time_step-1) * F_1_0)   # F_t_1
+    C5 = warp(torch.cat((I0, ReLU(args.dict['context_layer'](I0))), dim=1), BM*(-2*args.time_step))
+    C6 = warp(torch.cat((I1, ReLU(args.dict['context_layer'](I1))), dim=1), BM * 2 * (1-args.time_step))
 
     input = torch.cat((I0,C1,C2,C3,C4,C5,C6,I1),dim=1)
     DF = F.softmax(args.dict['DF_Net'](input),dim=1)
