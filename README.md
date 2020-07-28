@@ -25,6 +25,10 @@ Download repository:
 ```
     $ git clone https://github.com/JunHeum/BMBC.git
 ```
+Download [pre-trained model](https://drive.google.com/u/0/uc?export=download&confirm=JG-C&id=1YIxJguzgFp0t7iLHw1bKLrv7JQrc4lMG) parameters:
+```
+    $ unzip BMBC_Weights.zip
+```
 ### Usage
 Generate an intermediate frame at `t=0.5` on your pair of frames:
 ```
