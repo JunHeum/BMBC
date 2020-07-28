@@ -5,7 +5,7 @@ Keunsoo Ko,
 Chul Lee,
 and Chang-Su Kim
 
-Official PyTorch Code for **"BMBC: Bilateral Motion Estimation with Bilateral Cost Volume for Video Interpolation"** 
+Official PyTorch Code for **"BMBC: Bilateral Motion Estimation with Bilateral Cost Volume for Video Interpolation"** [[paper]](https://arxiv.org/abs/2007.12622)
 
 ### Requirements
 - PyTorch 1.3.1 (Other versions can cause different results)
