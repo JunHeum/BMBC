@@ -42,7 +42,7 @@ Generate an intermediate frame at arbitrary time `t`:
 Please cite the following paper if you feel this repository useful.
 ```
     @inproceedings{BMBC,
-        author    = {Junheum Park, Keunsoo Ko, Chul Lee,and Chang-Su Kim}, 
+        author    = {Park, Junheum and Ko, Keunsoo and Lee, Chul and Kim, Chang-Su}, 
         title     = {BMBC: Bilateral Motion Estimation with Bilateral Cost Volume for Video Interpolation}, 
         booktitle = {European Conference on Computer Vision},
         year      = {2020}
